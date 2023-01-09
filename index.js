@@ -33,8 +33,20 @@ const createMovie = async () => {
   const result = await movie.save()
   console.log(result)
 }
+// createMovie()
 
-createMovie()
+const getMovie = async () => {
+  const movies = await Movie
+     .find({isPublished: true})
+     .limit(10)
+     .sort({name: 1}) //order asc -> desc is -1
+     .select({name: 1, tags: 1}); // get only some properties 1=true
+
+     console.log(movies)
+}
+
+getMovie();
+
 
 app.use("/api/movie", moviesRouter);
 
