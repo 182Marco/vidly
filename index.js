@@ -11,6 +11,31 @@ const dbDebugger = require("debug")("app:db");
 const moviesRouter = require("./routes/movies");
 const mongoose = require("mongoose");
 
+const movieShema = new mongoose.Schema({
+  id: Number,
+  name: String,
+  author: String,
+  tags: [String],
+  date: { type: Date, default: Date.now },
+  isPublished: Boolean,
+});
+
+const Movie = mongoose.model("Movie", movieShema); // Movie it's a class
+
+
+const createMovie = async () => {
+  const movie = new Movie({
+    name: "scary movie",
+    author: "a dush",
+    tags: [`funny`, `commedy`],
+    isPublished: true,
+  });
+  const result = await movie.save()
+  console.log(result)
+}
+
+createMovie()
+
 app.use("/api/movie", moviesRouter);
 
 app.set("view engine", "pug");
