@@ -1,0 +1,7 @@
+{
+    "name" : "My express app - development",
+    "db": "mongodb://localhost/playground",
+    "mail" : {
+        "host" : "dev-mail-folder"
+    }
+}
