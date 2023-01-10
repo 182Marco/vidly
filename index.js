@@ -19,14 +19,14 @@ const movieShema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   isPublished: Boolean,
 });
-
 const Movie = mongoose.model("Movie", movieShema); // Movie it's a class
 
 
 const createMovie = async () => {
   const movie = new Movie({
-    name: "scary movie",
-    author: "a dush",
+    name: "Gladiator",
+    author: "Michael Bay",
+    price: 12,
     tags: [`funny`, `commedy`],
     isPublished: true,
   });
@@ -34,11 +34,14 @@ const createMovie = async () => {
   console.log(result)
 }
 // createMovie()
+const pageSize = 10
+const pageNumber = 3
 
 const getMovie = async () => {
   const movies = await Movie
-     .find({isPublished: true})
-     .limit(10)
+     .find({price: {$gte: 10, $lte: 20}})
+     .skip((pageNumber - 1) * pageSize)
+     .limit(pagesize)
      .sort({name: 1}) //order asc -> desc is -1
      .select({name: 1, tags: 1}); // get only some properties 1=true
 
