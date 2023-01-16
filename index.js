@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const Joi = require("joi");
 const app = express();
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -10,16 +9,9 @@ const startupDebugger = require("debug")("app:startup");
 const dbDebugger = require("debug")("app:db");
 const moviesRouter = require("./routes/movies");
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser')
 
-const movieShema = new mongoose.Schema({
-  id: Number,
-  name: String,
-  author: String,
-  tags: [String],
-  date: { type: Date, default: Date.now },
-  isPublished: Boolean,
-});
-const Movie = mongoose.model("Movie", movieShema); // Movie it's a class
+app.use(bodyParser.json())
 
 
 const createMovie = async () => {
@@ -41,14 +33,12 @@ const getMovie = async () => {
   const movies = await Movie
      .find({price: {$gte: 10, $lte: 20}})
      .skip((pageNumber - 1) * pageSize)
-     .limit(pagesize)
+     .limit(pageSize)
      .sort({name: 1}) //order asc -> desc is -1
      .select({name: 1, tags: 1}); // get only some properties 1=true
 
      console.log(movies)
 }
-
-getMovie();
 
 
 app.use("/api/movie", moviesRouter);
@@ -79,3 +69,5 @@ mongoose
 const port = process.env.PORT || 4000;
 
 app.listen(port, () => console.log(`listening on ${port}`));
+
+
